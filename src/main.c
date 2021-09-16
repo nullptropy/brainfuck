@@ -30,8 +30,7 @@ void run_file(const char *path) {
 
     printf("[");
     for (int i = 0; i < program.num; i++) {
-        opcode_print(program.values[i]); printf(", ");
-        free(program.values[i]);
+        opcode_print(&program.values[i]); printf(", ");
     }
     printf("\b\b]\n");
 

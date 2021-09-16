@@ -17,12 +17,12 @@ typedef struct opcode {
 } OpCode;
 
 typedef struct opcode_array {
-    OpCode **values;
+    OpCode *values;
     int num;
     int cap;
 } OpCodeArray;
 
-OpCode *opcode_new(OpCodeType type, int value);
-void    opcode_print(OpCode *opcode);
+OpCode opcode_new(OpCodeType type, int value);
+void   opcode_print(OpCode *opcode);
 
 #endif

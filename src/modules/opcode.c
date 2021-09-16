@@ -3,13 +3,8 @@
 
 #include "opcode.h"
 
-OpCode *opcode_new(OpCodeType type, int value) {
-    OpCode *opcode = malloc(sizeof(OpCode));
-
-    opcode->type = type;
-    opcode->value = value;
-
-    return opcode;
+OpCode opcode_new(OpCodeType type, int value) {
+    return (OpCode) {.type = type, .value = value};
 }
 
 void opcode_print(OpCode *opcode) {

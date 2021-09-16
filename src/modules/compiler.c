@@ -5,17 +5,14 @@
 #include "opcode.h"
 
 static int count_repeats(char target, const char *source, int index) {
-    int count = 0;
-
-    while (index < strlen(source)) {
-        if (source[index] != target) {
+    int p = index;
+    while (p < strlen(source)) {
+        if (source[p] != target) {
             break;
         }
-
-        count++; index++;
+        p++;
     }
-
-    return count;
+    return p - index;
 }
 
 OpCodeArray compile(const char *source) {
@@ -23,14 +20,14 @@ OpCodeArray compile(const char *source) {
     int error_occured = 0;
 
     array(int, stack); array_init(int, &stack, 8);
-    array(OpCode *, program); array_init(OpCode *, &program, 8);
+    array(OpCode, program); array_init(OpCode, &program, 8);
 
     while (index < strlen(source)) {
         char c = source[index];
 
         switch (c) {
-            case '.': array_add(&program, opcode_new(OP_PCH,  0)); break;
-            case ',': array_add(&program, opcode_new(OP_GCH,  0)); break;
+            case '.': array_add(&program, opcode_new(OP_PCH, 0)); break;
+            case ',': array_add(&program, opcode_new(OP_GCH, 0)); break;
 
             case '[': {
                 array_add(&program, opcode_new(OP_JZE, -1));
@@ -40,13 +37,14 @@ OpCodeArray compile(const char *source) {
             case ']': {
                 if (stack.num == 0) {
                     error_occured = 1;
-                    fprintf(stderr, "compiler error: unmatched `]` at index %d\n", index);
+                    fprintf(stderr, "compiler error: unmatched `]` at index %d\n",
+                            index);
                     break;
                 }
 
                 int op_pos = array_pop(&stack) - 1;
                 array_add(&program, opcode_new(OP_JNZ, op_pos + 1));
-                program.values[op_pos]->value = program.num;
+                program.values[op_pos].value = program.num;
                 break;
             }
 
@@ -68,11 +66,8 @@ OpCodeArray compile(const char *source) {
 
     if (error_occured == 1 || stack.num != 0) {
         for (int i = 0; i < stack.num; i++) {
-            fprintf(stderr, "compiler error: unmatched `[` at index %d\n", stack.values[i]);
-        }
-
-        for (int i = 0; i < program.num; i++) {
-            free(program.values[i]);
+            fprintf(stderr, "compiler error: unmatched `[` at index %d\n",
+                    stack.values[i]);
         }
 
         free((char*) source);
