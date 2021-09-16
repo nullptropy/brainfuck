@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "vm.h"
 #include "array.h"
 #include "opcode.h"
 #include "compiler.h"
@@ -26,14 +27,12 @@ void repl() {}
 void run_file(const char *path) {
     char *source = read_file(path);
     OpCodeArray program = compile(source);
+
+    VM *vm = vm_new(30000);
+    vm_execute(vm, &program);
+
+    vm_free(vm);
     free(source);
-
-    printf("[");
-    for (int i = 0; i < program.num; i++) {
-        opcode_print(&program.values[i]); printf(", ");
-    }
-    printf("\b\b]\n");
-
     array_free(&program);
 }
 
