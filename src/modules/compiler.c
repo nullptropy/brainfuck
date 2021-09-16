@@ -4,17 +4,6 @@
 #include "array.h"
 #include "opcode.h"
 
-static int count_repeats(char target, const char *source, int index) {
-    int p = index;
-    while (p < strlen(source)) {
-        if (source[p] != target) {
-            break;
-        }
-        p++;
-    }
-    return p - index;
-}
-
 OpCodeArray compile(const char *source) {
     int index = 0;
     int error_occured = 0;
@@ -49,19 +38,27 @@ OpCodeArray compile(const char *source) {
             }
 
             case '+': case '-': case '>': case '<': {
-                int value; OpCodeType type;
-                int repeats = count_repeats(c, source, index);
+                int value, repeats = 0; OpCodeType type;
+
+                while (index < strlen(source)) {
+                    if (strchr("+[>,.<]-", source[index]) != NULL) {
+                        if (c != source[index]) {
+                            break;
+                        }
+                        repeats++;
+                    }
+                    index++;
+                }
 
                 if (c == '+' || c == '>') { value = repeats; } else { value = -repeats; }
                 if (c == '+' || c == '-') {  type = OP_ADD;  } else {  type = OP_INC;   }
 
-                index += (repeats - 1);
                 array_add(&program, opcode_new(type, value));
-                break;
+                continue;
             }
         }
 
-        index += 1;
+        index++;
     }
 
     if (error_occured == 1 || stack.num != 0) {
