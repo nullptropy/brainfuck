@@ -21,12 +21,35 @@ void vm_free(VM *vm) {
 }
 
 int vm_execute(VM *vm, OpCodeArray *program) {
+    int exit_code = 0;
+
+    #ifdef DEBUG
+        array(char, buffer);
+        array_init(char, &buffer, 8);
+    #endif
+
     for (;;) {
         OpCode instruction = program->values[vm->ip];
 
+        #ifdef DEBUG
+            printf("%05d:%05d:0x%02x - ", vm->ip, vm->dp, vm->mem.values[vm->dp]);
+            opcode_print(&instruction);
+            printf("\n");
+        #endif
+
+        if (vm->dp >= vm->mem.cap || vm->ip >= program->num) {
+            exit_code = 1;
+            fprintf(stderr, "vm error: pointer overflow\n");
+            goto exit_loop;
+        }
+
         switch (instruction.type) {
             case OP_PCH:
-                putchar(vm->mem.values[vm->dp]);
+                #ifdef DEBUG
+                    array_add(&buffer, vm->mem.values[vm->dp]);
+                #else
+                    putchar(vm->mem.values[vm->dp]);
+                #endif
                 break;
             case OP_GCH:
                 vm->mem.values[vm->dp] = getchar();
@@ -47,9 +70,17 @@ int vm_execute(VM *vm, OpCodeArray *program) {
                 vm->mem.values[vm->dp] = 0;
                 break;
             case OP_HALT:
-                return 0;
+                goto exit_loop;
         }
 
         vm->ip++;
     }
+    exit_loop:
+        #ifdef DEBUG
+            array_add(&buffer, '\0');
+            printf("%s", buffer.values);
+            array_free(&buffer);
+        #endif
+
+    return exit_code;
 }
