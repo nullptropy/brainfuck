@@ -8,6 +8,7 @@ typedef enum {
     OP_INC,
     OP_JZE,
     OP_JNZ,
+    OP_ZERO,
     OP_HALT,
 } OpCodeType;
 

@@ -27,6 +27,9 @@ void opcode_print(OpCode *opcode) {
         case OP_JNZ:
             printf("JNZ(%d)", opcode->value);
             break;
+        case OP_ZERO:
+            printf("ZERO");
+            break;
         case OP_HALT:
             printf("HALT");
             break;

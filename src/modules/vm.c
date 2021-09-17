@@ -43,6 +43,9 @@ int vm_execute(VM *vm, OpCodeArray *program) {
             case OP_JNZ:
                 vm->ip = vm->mem.values[vm->dp] != 0 ? instruction.value : vm->ip + 1;
                 continue;
+            case OP_ZERO:
+                vm->mem.values[vm->dp] = 0;
+                break;
             case OP_HALT:
                 return 0;
         }

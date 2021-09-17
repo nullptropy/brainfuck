@@ -7,11 +7,12 @@
 OpCodeArray compile(const char *source) {
     int index = 0;
     int error_occured = 0;
+    int file_length = strlen(source);
 
     array(int, stack); array_init(int, &stack, 8);
     array(OpCode, program); array_init(OpCode, &program, 8);
 
-    while (index < strlen(source)) {
+    while (index < file_length) {
         char c = source[index];
 
         switch (c) {
@@ -19,6 +20,12 @@ OpCodeArray compile(const char *source) {
             case ',': array_add(&program, opcode_new(OP_GCH, 0)); break;
 
             case '[': {
+                if (source[index + 1] == '-' && source[index + 2] == ']') {
+                    array_add(&program, opcode_new(OP_ZERO, 0));
+                    index += 2;
+                    break;
+                }
+
                 array_add(&program, opcode_new(OP_JZE, -1));
                 array_add(&stack, program.num);
                 break;
@@ -40,7 +47,7 @@ OpCodeArray compile(const char *source) {
             case '+': case '-': case '>': case '<': {
                 int value, repeats = 0; OpCodeType type;
 
-                while (index < strlen(source)) {
+                while (index < file_length) {
                     if (strchr("+[>,.<]-", source[index]) != NULL) {
                         if (c != source[index]) {
                             break;
