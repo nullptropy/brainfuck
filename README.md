@@ -15,7 +15,7 @@ Generated build/Makefile...
 Done (28ms).
 sh-5.1$
 sh-5.1$ bear -- make config=debug # using bear to generate compile_commands.json for clangd
-==== Building bfc (release) ====
+==== Building bfc (debug) ====
 Creating obj/release
 main.c
 compiler.c
