@@ -1,3 +1,4 @@
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -20,6 +21,29 @@ void vm_free(VM *vm) {
     free(vm);
 }
 
+static void print_debug_string(VM *vm, OpCode *instruction) {
+    unsigned char c = vm->mem.values[vm->dp];
+    printf("%05d:(%05d:0x%02x:", vm->ip, vm->dp, c);
+
+    switch (c) {
+        case '\n': printf(" \\n"); break;
+        case '\t': printf(" \\t"); break;
+        case '\r': printf(" \\r"); break;
+        default:
+            if (c < 0x20 || c > 0x7f) {
+                printf("%03d", c);
+            } else {
+                printf("  %c", c);
+            }
+            break;
+    }
+
+    printf(") - "); opcode_print(instruction);
+}
+
+void execute_on_exit(int _val) {
+}
+
 int vm_execute(VM *vm, OpCodeArray *program) {
     int exit_code = 0;
 
@@ -32,8 +56,7 @@ int vm_execute(VM *vm, OpCodeArray *program) {
         OpCode instruction = program->values[vm->ip];
 
         #ifdef DEBUG
-            printf("%05d:%05d:0x%02x - ", vm->ip, vm->dp, vm->mem.values[vm->dp]);
-            opcode_print(&instruction);
+            print_debug_string(vm, &instruction);
             printf("\n");
         #endif
 
