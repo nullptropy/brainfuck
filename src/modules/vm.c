@@ -41,9 +41,6 @@ static void print_debug_string(VM *vm, OpCode *instruction) {
     printf(") - "); opcode_print(instruction);
 }
 
-void execute_on_exit(int _val) {
-}
-
 int vm_execute(VM *vm, OpCodeArray *program) {
     int exit_code = 0;
 

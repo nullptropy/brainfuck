@@ -12,7 +12,7 @@ struct stack_entry {
 OpCodeArray compile(const char *source) {
     int index = 0;
     int error_occured = 0;
-    int file_length = strlen(source);
+    int source_length = strlen(source);
 
     array(OpCode, program);
     array(struct stack_entry, stack);
@@ -20,7 +20,7 @@ OpCodeArray compile(const char *source) {
     array_init(OpCode, &program, 8);    
     array_init(struct stack_entry, &stack, 8);
 
-    while (index < file_length) {
+    while (index < source_length) {
         char c = source[index];
 
         switch (c) {
@@ -57,7 +57,7 @@ OpCodeArray compile(const char *source) {
             case '+': case '-': case '>': case '<': {
                 int value, repeats = 0; OpCodeType type;
 
-                while (index < file_length) {
+                while (index < source_length) {
                     if (strchr("+[>,.<]-", source[index]) != NULL) {
                         if (c != source[index]) {
                             break;
