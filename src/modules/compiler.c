@@ -79,6 +79,9 @@ OpCodeArray compile(const char *source) {
     }
 
     if (error_occured == 1 || stack.num != 0) {
+        // todo: handle errors in a better way so repl
+        // doesn't exit in a middle of a session
+
         for (int i = 0; i < stack.num; i++) {
             fprintf(stderr, "compiler error: unmatched `[` at index %d\n",
                     stack.values[i].file_index);
