@@ -4,8 +4,8 @@ workspace "bfc"
 project "bfc"
     kind "ConsoleApp"
     language "C"
-    location "build"
-    targetdir "build/%{cfg.buildcfg}"
+    location "bin"
+    targetdir "bin/%{cfg.buildcfg}"
 
     files { "**.h", "**.c" }
     includedirs { "src/include" }
@@ -23,7 +23,7 @@ project "bfc"
         trigger     = "clean",
         description = "clean the project",
         execute     = function ()
-            os.rmdir("./build")
+            os.rmdir("./bin")
             os.remove("Makefile")
         end
     }
