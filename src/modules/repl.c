@@ -2,18 +2,23 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "compiler.h"
+#include "vm.h"
 #include "repl.h"
+#include "opcode.h"
 #include "linenoise.h"
 
 static void repl_print_help() {
     printf("bfc:repl help\n"
-           "    `pb or `print-buffer    print current `source` buffer\n"
-           "    `q  or `quit            quit\n"
-           "    `h  or `help            this text\n");
+           "    `b  | `buffer          print current `source` buffer\n"
+           "    `q  | `quit            quit\n"
+           "    `r  | `run             interpret the `source` buffer\n"
+           "    `h  | `help            print this text\n");
 }
 
 void repl() {
-    char *buffer = malloc(sizeof(char) * 8);
+    VM *vm = vm_new(30000);
+    char *buffer = calloc(8, sizeof(char));
 
     for (;;) {
         char *line = linenoise("::: ");
@@ -33,21 +38,31 @@ void repl() {
         // so dumb: strcmp(...) * strcmp(...)
         // todo: replace all of this with a `switch` that is
         // overkill x3
-        if (strcmp(line, "`pb") * strcmp(line, "`print-buffer") == 0) {
+        if (strcmp(line, "`b") * strcmp(line, "`buffer") == 0) {
             if (strlen(buffer) > 0) {
                 printf("%s\n", buffer);
             }
-        } 
+            free(line);
+        }
         else if (strcmp(line, "`q") * strcmp(line, "`quit") == 0) {
             free(line);
             break;
         }
+        else if (strcmp(line, "`r") * strcmp(line, "`run") == 0) {
+            free(line); // doing this before calling compile because compile might fail and exit
+                        // and cause a memory leak
+
+            OpCodeArray program = compile(buffer);
+            free(buffer); buffer = calloc(8, sizeof(char));
+
+            vm_execute(vm, &program);
+        }
         else if (strcmp(line, "`h") * strcmp(line, "`help") == 0) {
             repl_print_help();
+            free(line);
         }
-
-        free(line);
     }
 
+    vm_free(vm);
     free(buffer);
 }

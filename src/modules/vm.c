@@ -42,6 +42,7 @@ static void print_debug_string(VM *vm, OpCode *instruction) {
 }
 
 int vm_execute(VM *vm, OpCodeArray *program) {
+    vm->ip = 0;
     int exit_code = 0;
 
     #ifdef DEBUG
