@@ -81,6 +81,7 @@ void repl() {
             free(buffer); buffer = calloc(8, sizeof(char));
 
             vm_execute(vm, &program);
+            array_free(&program);
         }
         else if (strcmp(line, "`h") * strcmp(line, "`help") == 0) {
             repl_print_help();
