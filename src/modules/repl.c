@@ -16,7 +16,7 @@
 #endif
 
 static void repl_print_help() {
-    printf("bfc:repl help\n"
+    printf("repl help\n"
            "    `b  | `buffer          print current `source` buffer\n"
            "    `q  | `quit            quit\n"
            "    `r  | `run             interpret the `source` buffer\n"
@@ -31,7 +31,7 @@ static void completion(const char *buffer, linenoiseCompletions *lc) {
 void repl() {
     char *history_file_name = ".bfc_history";
     char *history_file_path = calloc(
-        strlen(getenv("HOME") + strlen(history_file_name) + 2), sizeof(char));
+        strlen(getenv("HOME")) + strlen(history_file_name) + 2, sizeof(char));
 
     strcpy(history_file_path, getenv("HOME"));
     strcat(history_file_path, PATH_SEPARATOR);
@@ -75,7 +75,7 @@ void repl() {
         }
         else if (strcmp(line, "`r") * strcmp(line, "`run") == 0) {
             free(line); // doing this before calling compile because compile might
-                        // fail and exit and cause a memory leak
+                        // exit on failing and cause a memory leak
 
             OpCodeArray program = compile(buffer);
             free(buffer); buffer = calloc(8, sizeof(char));
