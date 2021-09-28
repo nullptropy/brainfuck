@@ -99,6 +99,7 @@ int vm_execute(VM *vm, OpCodeArray *program) {
         #ifdef DEBUG
             array_add(&buffer, '\0');
             printf("%s", buffer.values);
+            fflush(stdout);
             array_free(&buffer);
         #endif
 
