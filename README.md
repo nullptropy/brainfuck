@@ -1,6 +1,6 @@
 # bfc
 
-brainfuck interpreter with some simple optimizations implemented in.
+brainfuck interpreter and repl with some simple optimizations implemented in.
 
 ## building
 
@@ -28,3 +28,9 @@ sh-5.1$ ./build/debug/bfc totally valid args
 usage: ./build/debug/bfc [path]
 sh-5.1$
 ```
+
+## images
+
+![mandelbrot](https://i.imgur.com/2CuTF1p.png)
+
+![repl](https://i.imgur.com/4a7AW9C.png)
