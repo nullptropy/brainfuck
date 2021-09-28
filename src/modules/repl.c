@@ -57,36 +57,34 @@ void repl() {
         if (line[0] != '`') {
             buffer = realloc(
                 buffer, sizeof(char) * (strlen(buffer) + strlen(line)) + 1);
-            strcat(buffer, line); free(line);
-            continue;
+            strcat(buffer, line);
+            free(line); continue;
         }
 
-        // so dumb: strcmp(...) * strcmp(...)
-        // todo: replace all of this with a `switch` that is probably overkill x3
+        // lmao: strcmp(...) * strcmp(...)
+        // todo: replace all of this with a `switch` statement that is probably overkill x3
         if (strcmp(line, "`b") * strcmp(line, "`buffer") == 0) {
-            if (strlen(buffer) > 0) {
+            if (strlen(buffer) > 0)
                 printf("%s\n", buffer);
-            }
-            free(line);
         }
         else if (strcmp(line, "`q") * strcmp(line, "`quit") == 0) {
             free(line);
             break;
         }
         else if (strcmp(line, "`r") * strcmp(line, "`run") == 0) {
-            free(line); // doing this before calling compile because compile might
-                        // exit on failing and cause a memory leak
+            OpCodeArray *program = compile(buffer);
+            if (program != NULL) {
+                vm_execute(vm, program);
+                array_free(program); free(program);
+            }
 
-            OpCodeArray program = compile(buffer);
             free(buffer); buffer = calloc(8, sizeof(char));
-
-            vm_execute(vm, &program);
-            array_free(&program);
         }
         else if (strcmp(line, "`h") * strcmp(line, "`help") == 0) {
             repl_print_help();
-            free(line);
         }
+
+        free(line);
     }
 
     vm_free(vm);

@@ -13,14 +13,18 @@ void run_file(const char *path) {
     if (source == NULL)
         exit(1);
 
-    OpCodeArray program = compile(source);
+    OpCodeArray *program = compile(source);
+    if (program == NULL) {
+        free(source);
+        exit(1);
+    }
 
     VM *vm = vm_new(30000);
-    vm_execute(vm, &program);
+    vm_execute(vm, program);
 
     vm_free(vm);
     free(source);
-    array_free(&program);
+    array_free(program); free(program);
 }
 
 int main(int argc, char **argv) {

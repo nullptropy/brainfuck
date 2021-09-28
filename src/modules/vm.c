@@ -17,8 +17,7 @@ VM *vm_new(int size) {
 }
 
 void vm_free(VM *vm) {
-    array_free(&vm->mem);
-    free(vm);
+    array_free(&vm->mem); free(vm);
 }
 
 static void print_debug_string(VM *vm, OpCode *instruction) {

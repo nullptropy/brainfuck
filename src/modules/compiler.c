@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "array.h"
@@ -9,35 +10,35 @@ struct stack_entry {
     int code_index;
 };
 
-OpCodeArray compile(const char *source) {
+OpCodeArray *compile(const char *source) {
     int index = 0;
     int error_occured = 0;
     int source_length = strlen(source);
 
-    array(OpCode, program);
+    OpCodeArray *program = malloc(sizeof(OpCodeArray));
     array(struct stack_entry, stack);
 
-    array_init(OpCode, &program, 8);    
+    array_init(OpCode, program, 8);
     array_init(struct stack_entry, &stack, 8);
 
     while (index < source_length) {
         char c = source[index];
 
         switch (c) {
-            case '.': array_add(&program, opcode_new(OP_PCH, 0)); break;
-            case ',': array_add(&program, opcode_new(OP_GCH, 0)); break;
+            case '.': array_add(program, opcode_new(OP_PCH, 0)); break;
+            case ',': array_add(program, opcode_new(OP_GCH, 0)); break;
 
             case '[': {
                 if (source[index + 1] == '-' && source[index + 2] == ']') {
-                    array_add(&program, opcode_new(OP_ZERO, 0));
+                    array_add(program, opcode_new(OP_ZERO, 0));
                     index += 2;
                     break;
                 }
 
-                array_add(&program, opcode_new(OP_JZE, -1));
+                array_add(program, opcode_new(OP_JZE, -1));
                 array_add(&stack,
                         ((struct stack_entry) { .file_index = index,
-                                                .code_index = program.num }));
+                                                .code_index = program->num }));
                 break;
             }
             case ']': {
@@ -49,8 +50,8 @@ OpCodeArray compile(const char *source) {
                 }
 
                 int opcode_index = array_pop(&stack).code_index - 1;
-                array_add(&program, opcode_new(OP_JNZ, opcode_index + 1));
-                program.values[opcode_index].value = program.num;
+                array_add(program, opcode_new(OP_JNZ, opcode_index + 1));
+                program->values[opcode_index].value = program->num;
                 break;
             }
 
@@ -70,7 +71,7 @@ OpCodeArray compile(const char *source) {
                 if (c == '+' || c == '>') { value = repeats; } else { value = -repeats; }
                 if (c == '+' || c == '-') {  type = OP_ADD;  } else {  type = OP_INC;   }
 
-                array_add(&program, opcode_new(type, value));
+                array_add(program, opcode_new(type, value));
                 continue;
             }
         }
@@ -79,24 +80,19 @@ OpCodeArray compile(const char *source) {
     }
 
     if (error_occured == 1 || stack.num != 0) {
-        // todo: handle errors in a better way so repl
-        // doesn't exit in the middle of a session
-
         for (int i = 0; i < stack.num; i++) {
             fprintf(stderr, "compiler error: unmatched `[` at index %d\n",
                     stack.values[i].file_index);
         }
 
-        free((char*) source);
         array_free(&stack);
-        array_free(&program);
+        array_free(program); free(program);
 
-        exit(1);
+        return NULL;
     }
 
     array_free(&stack);
-    array_add(&program, opcode_new(OP_HALT, 0));
+    array_add(program, opcode_new(OP_HALT, 0));
 
-    return (OpCodeArray) {
-        .values = program.values, .num = program.num, .cap = program.cap};
+    return program;
 }

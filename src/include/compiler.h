@@ -4,6 +4,6 @@
 #include "array.h"
 #include "opcode.h"
 
-OpCodeArray compile(const char *source);
+OpCodeArray *compile(const char *source);
 
 #endif
