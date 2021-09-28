@@ -36,8 +36,8 @@ OpCodeArray compile(const char *source) {
 
                 array_add(&program, opcode_new(OP_JZE, -1));
                 array_add(&stack,
-                        ((struct stack_entry){.file_index = index,
-                                              .code_index = program.num}));
+                        ((struct stack_entry) { .file_index = index,
+                                                .code_index = program.num }));
                 break;
             }
             case ']': {
