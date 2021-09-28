@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "vm.h"
 #include "repl.h"
@@ -9,6 +10,9 @@
 
 void run_file(const char *path) {
     char *source = read_file(path);
+    if (source == NULL)
+        exit(1);
+
     OpCodeArray program = compile(source);
 
     VM *vm = vm_new(30000);
