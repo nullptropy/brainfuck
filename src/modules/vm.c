@@ -25,14 +25,14 @@ static void print_debug_string(VM *vm, OpCode *instruction) {
     printf("%05d:(%05d:0x%02x:", vm->ip, vm->dp, c);
 
     switch (c) {
-        case '\n': printf(" \\n"); break;
-        case '\t': printf(" \\t"); break;
-        case '\r': printf(" \\r"); break;
+        case '\n': printf("\\n "); break;
+        case '\t': printf("\\t "); break;
+        case '\r': printf("\\r "); break;
         default:
             if (c < 0x20 || c > 0x7f) {
                 printf("%03d", c);
             } else {
-                printf("  %c", c);
+                printf("%c  ", c);
             }
             break;
     }
@@ -40,22 +40,20 @@ static void print_debug_string(VM *vm, OpCode *instruction) {
     printf(") - "); opcode_print(instruction);
 }
 
-int vm_execute(VM *vm, OpCodeArray *program) {
+int vm_execute(VM *vm, OpCodeArray *program, int debug) {
     vm->ip = 0;
     int exit_code = 0;
 
-    #ifdef DEBUG
-        array(char, buffer);
-        array_init(char, &buffer, 8);
-    #endif
+    array(char, buffer);
+    array_init(char, &buffer, 0);
 
     for (;;) {
         OpCode instruction = program->values[vm->ip];
 
-        #ifdef DEBUG
+        if (debug == 1) {
             print_debug_string(vm, &instruction);
             printf("\n");
-        #endif
+        }
 
         if (vm->dp >= vm->mem.cap || vm->ip >= program->num) {
             exit_code = 1;
@@ -65,11 +63,11 @@ int vm_execute(VM *vm, OpCodeArray *program) {
 
         switch (instruction.type) {
             case OP_PCH:
-                #ifdef DEBUG
+                if (debug == 1) {
                     array_add(&buffer, vm->mem.values[vm->dp]);
-                #else
+				} else {
                     putchar(vm->mem.values[vm->dp]);
-                #endif
+                }
                 break;
             case OP_GCH:
                 vm->mem.values[vm->dp] = getchar();
@@ -96,12 +94,12 @@ int vm_execute(VM *vm, OpCodeArray *program) {
         vm->ip++;
     }
     exit_loop:
-        #ifdef DEBUG
+        if (debug == 1) {
             array_add(&buffer, '\0');
             printf("%s", buffer.values);
             fflush(stdout);
-            array_free(&buffer);
-        #endif
+        }
+        array_free(&buffer);
 
     return exit_code;
 }

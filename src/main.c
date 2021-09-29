@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "vm.h"
 #include "repl.h"
@@ -8,7 +9,7 @@
 #include "opcode.h"
 #include "compiler.h"
 
-void run_file(const char *path) {
+static void interpret_file(const char *path, int debug) {
     char *source = read_file(path);
     if (source == NULL)
         exit(1);
@@ -20,7 +21,7 @@ void run_file(const char *path) {
     }
 
     VM *vm = vm_new(30000);
-    vm_execute(vm, program);
+    vm_execute(vm, program, debug);
 
     vm_free(vm);
     free(source);
@@ -28,13 +29,28 @@ void run_file(const char *path) {
 }
 
 int main(int argc, char **argv) {
-    switch (argc) {
-        case 1: repl(); break;
-        case 2: run_file(argv[1]); break;
-        default:
-            fprintf(stderr, "usage: %s [path]\n", argv[0]);
-            break;
+    int debug = 0;
+    char *file_path = NULL;
+
+    if (argc > 3) {
+        printf("%s [path] [-d]\n", argv[0]);
+        return 0;
     }
+
+	while (argc > 1) {
+	    argc--;
+	    argv++;
+
+	    if (strcmp(*argv, "-d") * strcmp(*argv, "--debug") == 0)
+	        debug = 1;
+	    else
+	        file_path = *argv;
+	}
+
+    if (file_path == NULL)
+        repl(debug);
+    else
+        interpret_file(file_path, debug);
 
     return 0;
 }

@@ -28,7 +28,7 @@ static void completion(const char *buffer, linenoiseCompletions *lc) {
         return;
 }
 
-void repl() {
+void repl(int debug) {
     char *history_file_name = ".bfc_history";
     char *history_file_path = calloc(
         strlen(getenv("HOME")) + strlen(history_file_name) + 2, sizeof(char));
@@ -74,7 +74,7 @@ void repl() {
         else if (strcmp(line, "`r") * strcmp(line, "`run") == 0) {
             OpCodeArray *program = compile(buffer);
             if (program != NULL) {
-                vm_execute(vm, program);
+                vm_execute(vm, program, debug);
                 array_free(program); free(program);
             }
 
