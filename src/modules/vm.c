@@ -65,7 +65,7 @@ int vm_execute(VM *vm, OpCodeArray *program, int debug) {
             case OP_PCH:
                 if (debug == 1) {
                     array_add(&buffer, vm->mem.values[vm->dp]);
-				} else {
+                } else {
                     putchar(vm->mem.values[vm->dp]);
                 }
                 break;

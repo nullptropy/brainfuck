@@ -37,15 +37,15 @@ int main(int argc, char **argv) {
         return 0;
     }
 
-	while (argc > 1) {
-	    argc--;
-	    argv++;
+    while (argc > 1) {
+        argc--;
+        argv++;
 
-	    if (strcmp(*argv, "-d") * strcmp(*argv, "--debug") == 0)
-	        debug = 1;
-	    else
-	        file_path = *argv;
-	}
+        if (strcmp(*argv, "-d") * strcmp(*argv, "--debug") == 0)
+            debug = 1;
+        else
+            file_path = *argv;
+    }
 
     if (file_path == NULL)
         repl(debug);
