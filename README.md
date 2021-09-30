@@ -1,36 +1,36 @@
 # bfc
 
-brainfuck interpreter and repl with some simple optimizations implemented in.
+brainfuck interpreter and repl with some optimizations implemented in.
 
 ## building
 
 bfc uses [premake5](https://premake.github.io/) to generate the required build files.
 
 ```
-sh-5.1$ premake5 --cc=clang gmake # build files for gnu make
+main:bfc (master) premake gmake
 Building configurations...
 Running action 'gmake'...
 Generated Makefile...
-Generated build/Makefile...
-Done (28ms).
-sh-5.1$
-sh-5.1$ bear -- make config=debug # using bear to generate compile_commands.json for clangd
+Generated bin/Makefile...
+Done (82ms).
+main:bfc (master) bear -- make
 ==== Building bfc (debug) ====
-Creating obj/release
+Creating obj/debug
 main.c
 compiler.c
+linenoise.c
 opcode.c
+repl.c
+utils.c
 vm.c
-Creating release
+Creating debug
 Linking bfc
-sh-5.1$
-sh-5.1$ ./build/debug/bfc totally valid args
-usage: ./build/debug/bfc [path]
-sh-5.1$
+main:bfc (master) ./bin/debug/bfc --help
+usage: ./bfc [path] [-d] [-h]
 ```
 
 ## images
 
-![mandelbrot](https://i.imgur.com/2CuTF1p.png)
+![mandelbrot](https://i.imgur.com/5KMSYy2.png)
 
-![repl](https://i.imgur.com/4a7AW9C.png)
+![repl](https://i.imgur.com/dy3cQel.png)
