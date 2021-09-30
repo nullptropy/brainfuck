@@ -33,7 +33,7 @@ int main(int argc, char **argv) {
     char *file_path = NULL;
 
     if (argc > 3) {
-        printf("%s [path] [-d]\n", argv[0]);
+        printf("usage: ./bfc [path] [-d]\n");
         return 0;
     }
 
@@ -41,10 +41,16 @@ int main(int argc, char **argv) {
         argc--;
         argv++;
 
-        if (strcmp(*argv, "-d") * strcmp(*argv, "--debug") == 0)
+        if (strcmp(*argv, "-d") * strcmp(*argv, "--debug") == 0) {
             debug = 1;
-        else
+        }
+        else if (strcmp(*argv, "-h") * strcmp(*argv, "--help") == 0) {
+            printf("usage: ./bfc [path] [-d] [-h]\n");
+            return 0;
+        }
+        else {
             file_path = *argv;
+        }
     }
 
     if (file_path == NULL)
