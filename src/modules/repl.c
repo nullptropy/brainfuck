@@ -17,9 +17,10 @@
 
 static void repl_print_help() {
     printf("repl help\n"
-           "    `b  | `buffer          print current `source` buffer\n"
-           "    `q  | `quit            quit\n"
+           "    `b  | `buffer          print the current `source` buffer\n"
            "    `r  | `run             interpret the `source` buffer\n"
+           "    `m  | `mem             inspect the memory"
+           "    `q  | `quit            quit\n"
            "    `h  | `help            print this text\n");
 }
 
@@ -56,7 +57,7 @@ void repl(int debug) {
 
         if (line[0] != '`') {
             buffer = realloc(
-                buffer, sizeof(char) * (strlen(buffer) + strlen(line)) + 1);
+                buffer, sizeof(char) * (strlen(buffer) + strlen(line) + 1));
             strcat(buffer, line);
             free(line); continue;
         }
@@ -67,10 +68,6 @@ void repl(int debug) {
             if (strlen(buffer) > 0)
                 printf("%s\n", buffer);
         }
-        else if (strcmp(line, "`q") * strcmp(line, "`quit") == 0) {
-            free(line);
-            break;
-        }
         else if (strcmp(line, "`r") * strcmp(line, "`run") == 0) {
             OpCodeArray *program = compile(buffer);
             if (program != NULL) {
@@ -79,6 +76,20 @@ void repl(int debug) {
             }
 
             free(buffer); buffer = calloc(8, sizeof(char));
+        }
+        else if (strcmp(line, "`m") * strcmp(line, "`mem") == 0) {
+            printf("[%05d:0x%02x] [", vm->dp, vm->mem.values[vm->dp]);
+            for (int i = -5; i < 6; i++) {
+                if (vm->dp + i >= 0) {
+                    char *temp = i != 0 ? "%02x, " : "\x1B[36m%02x\x1B[0m, ";
+                    printf(temp, vm->mem.values[vm->dp + i]);
+                }
+            }
+            printf("\b\b]\n");
+        }
+        else if (strcmp(line, "`q") * strcmp(line, "`quit") == 0) {
+            free(line);
+            break;
         }
         else if (strcmp(line, "`h") * strcmp(line, "`help") == 0) {
             repl_print_help();
