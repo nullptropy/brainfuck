@@ -19,7 +19,7 @@ static void repl_print_help() {
     printf("repl help\n"
            "    `b  | `buffer          print the current `source` buffer\n"
            "    `r  | `run             interpret the `source` buffer\n"
-           "    `m  | `mem             inspect the memory"
+           "    `m  | `mem             inspect the memory\n"
            "    `q  | `quit            quit\n"
            "    `h  | `help            print this text\n");
 }
