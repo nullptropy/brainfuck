@@ -17,11 +17,12 @@
 
 static void repl_print_help() {
     printf("repl help\n"
-           "    `b  | `buffer          print the current `source` buffer\n"
-           "    `r  | `run             interpret the `source` buffer\n"
-           "    `m  | `mem             inspect the memory\n"
-           "    `q  | `quit            quit\n"
-           "    `h  | `help            print this text\n");
+           "    `b | `buffer    print the current `program` buffer\n"
+           "    `c | `clear     clear the current `program buffer\n"
+           "    `r | `run       interpret the `program` buffer\n"
+           "    `m | `mem       inspect the memory\n"
+           "    `q | `quit      quit\n"
+           "    `h | `help      print this text\n");
 }
 
 static void completion(const char *buffer, linenoiseCompletions *lc) {
@@ -67,6 +68,10 @@ void repl(int debug) {
         if (strcmp(line, "`b") * strcmp(line, "`buffer") == 0) {
             if (strlen(buffer) > 0)
                 printf("%s\n", buffer);
+        }
+        if (strcmp(line, "`c") * strcmp(line, "`clear") == 0) {
+            free(buffer);
+            buffer = calloc(8, sizeof(char));
         }
         else if (strcmp(line, "`r") * strcmp(line, "`run") == 0) {
             OpCodeArray *program = compile(buffer);
