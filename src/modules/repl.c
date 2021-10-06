@@ -18,7 +18,7 @@
 static void repl_print_help() {
     printf("repl help\n"
            "    `b | `buffer    print the current `program` buffer\n"
-           "    `c | `clear     clear the current `program buffer\n"
+           "    `c | `clear     clear the current `program` buffer\n"
            "    `r | `run       interpret the `program` buffer\n"
            "    `m | `mem       inspect the memory\n"
            "    `q | `quit      quit\n"
