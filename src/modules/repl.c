@@ -63,8 +63,6 @@ void repl(int debug) {
             free(line); continue;
         }
 
-        // lmao: strcmp(...) * strcmp(...)
-        // todo: replace all of this with a `switch` statement that is probably overkill x3
         if (strcmp(line, "`b") * strcmp(line, "`buffer") == 0) {
             if (strlen(buffer) > 0)
                 printf("%s\n", buffer);
