@@ -9,6 +9,14 @@
 #include "opcode.h"
 #include "compiler.h"
 
+static void print_help_string() {
+    printf("usage: ./bfc [path] [-d] [-h]\n"
+           "\n"
+           "optional arguments:\n"
+           "    -d, --debug     run the interpreter in debug mode\n"
+           "    -h, --help      print this text\n");
+}
+
 static void interpret_file(const char *path, int debug) {
     char *source = read_file(path);
     if (source == NULL)
@@ -33,7 +41,7 @@ int main(int argc, char **argv) {
     char *file_path = NULL;
 
     if (argc > 3) {
-        printf("usage: ./bfc [path] [-d]\n");
+        print_help_string();
         return 0;
     }
 
@@ -45,7 +53,7 @@ int main(int argc, char **argv) {
             debug = 1;
         }
         else if (strcmp(*argv, "-h") * strcmp(*argv, "--help") == 0) {
-            printf("usage: ./bfc [path] [-d] [-h]\n");
+            print_help_string();
             return 0;
         }
         else {
