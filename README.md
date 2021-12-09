@@ -1,6 +1,6 @@
 # bfc
 
-brainfuck interpreter and repl with some optimizations implemented in.
+brainfuck interpreter and repl with some simple optimizations implemented in: for the time being it can detect clear loops, combine repeating operations (-><+) and it can link loops at compile time.
 
 ## building
 
