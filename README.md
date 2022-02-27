@@ -1,6 +1,6 @@
 # bfc
 
-brainfuck interpreter and repl with some simple optimizations implemented in: for the time being it can detect clear loops, combine repeating operations (-><+) and it can link loops at compile time.
+brainfuck interpreter and repl with some optimizations implemented in: for the time being it can detect clear loops, combine repeating operations (-><+) and it can link loops at compile time.
 
 ## building
 
@@ -16,9 +16,3 @@ optional arguments:
     -d, --debug     run the interpreter in debug mode
     -h, --help      print this text
 ```
-
-## images
-
-![mandelbrot](https://i.imgur.com/5KMSYy2.png)
-
-![repl](https://i.imgur.com/xHvyp4R.png)
