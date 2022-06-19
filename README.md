@@ -4,12 +4,12 @@ brainfuck interpreter and repl with some optimizations implemented in: for the t
 
 ## building
 
-bfc uses [premake5](https://premake.github.io/) to generate the required build files.
+bfc uses the [meson](https://github.com/mesonbuild/meson) build system.
 
-```
-main:bfc (master) premake gmake # build files for gnu make
-main:bfc (master) bear -- make  # using bear to generate the compile_commands.json file for clangd
-main:bfc (master) ./bin/debug/bfc --help
+```sh
+$ meson setup build
+$ meson compile -C build
+$ ./build/brainfuck --help
 usage: ./bfc [path] [-d] [-h]
 
 optional arguments:
