@@ -4,18 +4,18 @@
 
 #include "array.h"
 #include "opcode.h"
+#include "compiler.h"
 
 struct stack_entry {
     int file_index;
     int code_index;
 };
 
-OpCodeArray *compile(const char *source) {
+bool compile(const char *source, OpCodeArray *program) {
     int index = 0;
     int error_occured = 0;
     int source_length = strlen(source);
 
-    OpCodeArray *program = malloc(sizeof(OpCodeArray));
     array(struct stack_entry, stack);
 
     array_init(OpCode, program, 8);
@@ -29,7 +29,8 @@ OpCodeArray *compile(const char *source) {
             case ',': array_add(program, opcode_new(OP_GCH, 0)); break;
 
             case '[': {
-                if (source[index + 1] == '-' && source[index + 2] == ']') {
+                if ((source[index + 1] == '-' || source[index + 1] == '+') &&
+                    source[index + 2] == ']') {
                     array_add(program, opcode_new(OP_ZERO, 0));
                     index += 2;
                     break;
@@ -88,11 +89,11 @@ OpCodeArray *compile(const char *source) {
         array_free(&stack);
         array_free(program); free(program);
 
-        return NULL;
+        return false;
     }
 
     array_free(&stack);
     array_add(program, opcode_new(OP_HALT, 0));
 
-    return program;
+    return true;
 }

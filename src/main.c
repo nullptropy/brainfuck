@@ -22,18 +22,18 @@ static void interpret_file(const char *path, int debug) {
     if (source == NULL)
         exit(1);
 
-    OpCodeArray *program = compile(source);
-    if (program == NULL) {
+    OpCodeArray program; array_init(OpCode, &program, 8);
+    if (!compile(source, &program)) {
         free(source);
         exit(1);
     }
 
     VM *vm = vm_new(30000);
-    vm_execute(vm, program, debug);
+    vm_execute(vm, &program, debug);
 
     vm_free(vm);
     free(source);
-    array_free(program); free(program);
+    array_free(&program);
 }
 
 int main(int argc, char **argv) {

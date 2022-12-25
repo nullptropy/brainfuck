@@ -1,9 +1,11 @@
 #ifndef bf_compiler_h
 #define bf_compiler_h
 
+#include <stdbool.h>
+
 #include "array.h"
 #include "opcode.h"
 
-OpCodeArray *compile(const char *source);
+bool compile(const char *source, OpCodeArray *program);
 
 #endif
