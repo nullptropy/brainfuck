@@ -8,6 +8,7 @@ bfc uses the [meson](https://github.com/mesonbuild/meson) build system.
 
 ```sh
 $ meson setup build
+$ meson configure --buildtype release build
 $ meson compile -C build
 $ ./build/brainfuck --help
 usage: ./bfc [path] [-d] [-h]
