@@ -10,20 +10,20 @@ typedef enum {
     OP_JNZ,
     OP_ZERO,
     OP_HALT,
-} OpCodeType;
+} OpcodeType;
 
 typedef struct opcode {
-    OpCodeType type;
+    OpcodeType type;
     int value;
-} OpCode;
+} Opcode;
 
 typedef struct opcode_array {
-    OpCode *values;
+    Opcode *values;
     int num;
     int cap;
-} OpCodeArray;
+} OpcodeArray;
 
-OpCode opcode_new(OpCodeType type, int value);
-void   opcode_print(OpCode *opcode);
+Opcode opcode_new(OpcodeType type, int value);
+void   opcode_print(Opcode *opcode);
 
 #endif

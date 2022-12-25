@@ -3,11 +3,11 @@
 
 #include "opcode.h"
 
-OpCode opcode_new(OpCodeType type, int value) {
-    return (OpCode) {.type = type, .value = value};
+Opcode opcode_new(OpcodeType type, int value) {
+    return (Opcode) {.type = type, .value = value};
 }
 
-void opcode_print(OpCode *opcode) {
+void opcode_print(Opcode *opcode) {
     switch (opcode->type) {
         case OP_PCH:
             printf("PCH");

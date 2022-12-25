@@ -22,7 +22,7 @@ static void interpret_file(const char *path, int debug) {
     if (source == NULL)
         exit(1);
 
-    OpCodeArray program; array_init(OpCode, &program, 8);
+    OpcodeArray program; array_init(Opcode, &program, 8);
     if (!compile(source, &program)) {
         free(source);
         exit(1);

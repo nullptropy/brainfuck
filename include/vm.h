@@ -11,7 +11,7 @@ typedef struct virtual_machine {
 } VM;
 
 VM   *vm_new(int size);
-int   vm_execute(VM *vm, OpCodeArray *program, int debug);
+int   vm_execute(VM *vm, OpcodeArray *program, int debug);
 void  vm_free(VM *vm);
 
 #endif

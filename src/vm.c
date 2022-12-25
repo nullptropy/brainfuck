@@ -20,7 +20,7 @@ void vm_free(VM *vm) {
     array_free(&vm->mem); free(vm);
 }
 
-static void print_debug_string(VM *vm, OpCode *instruction) {
+static void print_debug_string(VM *vm, Opcode *instruction) {
     unsigned char c = vm->mem.values[vm->dp];
     printf("%05d:(%05d:0x%02x:", vm->ip, vm->dp, c);
 
@@ -40,7 +40,7 @@ static void print_debug_string(VM *vm, OpCode *instruction) {
     printf(") - "); opcode_print(instruction);
 }
 
-int vm_execute(VM *vm, OpCodeArray *program, int debug) {
+int vm_execute(VM *vm, OpcodeArray *program, int debug) {
     vm->ip = 0;
     int exit_code = 0;
 
@@ -48,7 +48,7 @@ int vm_execute(VM *vm, OpCodeArray *program, int debug) {
     array_init(char, &buffer, 0);
 
     for (;;) {
-        OpCode instruction = program->values[vm->ip];
+        Opcode instruction = program->values[vm->ip];
 
         if (debug == 1) {
             print_debug_string(vm, &instruction);

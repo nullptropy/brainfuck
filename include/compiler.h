@@ -6,6 +6,6 @@
 #include "array.h"
 #include "opcode.h"
 
-bool compile(const char *source, OpCodeArray *program);
+bool compile(const char *source, OpcodeArray *program);
 
 #endif

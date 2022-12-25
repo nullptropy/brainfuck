@@ -11,14 +11,14 @@ struct stack_entry {
     int code_index;
 };
 
-bool compile(const char *source, OpCodeArray *program) {
+bool compile(const char *source, OpcodeArray *program) {
     int index = 0;
     int error_occured = 0;
     int source_length = strlen(source);
 
     array(struct stack_entry, stack);
 
-    array_init(OpCode, program, 8);
+    array_init(Opcode, program, 8);
     array_init(struct stack_entry, &stack, 8);
 
     while (index < source_length) {
@@ -57,7 +57,7 @@ bool compile(const char *source, OpCodeArray *program) {
             }
 
             case '+': case '-': case '>': case '<': {
-                int value, repeats = 0; OpCodeType type;
+                int value, repeats = 0; OpcodeType type;
 
                 while (index < source_length) {
                     if (strchr("+[>,.<]-", source[index]) != NULL) {

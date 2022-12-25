@@ -72,7 +72,7 @@ void repl(int debug) {
             buffer = calloc(8, sizeof(char));
         }
         else if (strcmp(line, "`r") * strcmp(line, "`run") == 0) {
-            OpCodeArray program; array_init(OpCode, &program, 8);
+            OpcodeArray program; array_init(Opcode, &program, 8);
             if (compile(buffer, &program)) {
                 vm_execute(vm, &program, debug);
                 array_free(&program);
