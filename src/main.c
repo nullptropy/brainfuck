@@ -28,10 +28,10 @@ static void interpret_file(const char *path, int debug) {
         exit(1);
     }
 
-    VM *vm = vm_new(30000);
-    vm_execute(vm, &program, debug);
+    VM vm; vm_init(&vm, 30000);
+    vm_execute(&vm, &program, debug);
 
-    vm_free(vm);
+    vm_free(&vm);
     free(source);
     array_free(&program);
 }

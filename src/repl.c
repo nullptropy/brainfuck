@@ -42,7 +42,7 @@ void repl(int debug) {
     linenoiseSetCompletionCallback(completion);
     linenoiseHistoryLoad(history_file_path);
 
-    VM *vm = vm_new(30000);
+    VM vm; vm_init(&vm, 30000);
     char *buffer = calloc(8, sizeof(char));
 
     for (;;) {
@@ -74,18 +74,18 @@ void repl(int debug) {
         else if (strcmp(line, "`r") * strcmp(line, "`run") == 0) {
             OpcodeArray program; array_init(Opcode, &program, 8);
             if (compile(buffer, &program)) {
-                vm_execute(vm, &program, debug);
+                vm_execute(&vm, &program, debug);
                 array_free(&program);
             }
 
             free(buffer); buffer = calloc(8, sizeof(char));
         }
         else if (strcmp(line, "`m") * strcmp(line, "`mem") == 0) {
-            printf("[%05d:0x%02x] [", vm->dp, vm->mem.values[vm->dp]);
+            printf("[%05d:0x%02x] [", vm.dp, vm.mem.values[vm.dp]);
             for (int i = -5; i < 6; i++) {
-                if (vm->dp + i >= 0) {
+                if (vm.dp + i >= 0) {
                     char *temp = i != 0 ? "%02x, " : "\x1B[36m%02x\x1B[0m, ";
-                    printf(temp, vm->mem.values[vm->dp + i]);
+                    printf(temp, vm.mem.values[vm.dp + i]);
                 }
             }
             printf("\b\b]\n");
@@ -101,7 +101,7 @@ void repl(int debug) {
         free(line);
     }
 
-    vm_free(vm);
+    vm_free(&vm);
     free(buffer);
     free(history_file_path);
 }

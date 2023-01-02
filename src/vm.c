@@ -6,18 +6,14 @@
 #include "array.h"
 #include "opcode.h"
 
-VM *vm_new(int size) {
-    VM *vm = (VM *) malloc(sizeof(VM));
-
+void vm_init(VM *vm, int size) {
     vm->ip = 0;
     vm->dp = 0;
     array_init(unsigned char, &vm->mem, size);
-
-    return vm;
 }
 
 void vm_free(VM *vm) {
-    array_free(&vm->mem); free(vm);
+    array_free(&vm->mem);
 }
 
 static void print_debug_string(VM *vm, Opcode *instruction) {

@@ -10,8 +10,8 @@ typedef struct virtual_machine {
     array(unsigned char, mem);
 } VM;
 
-VM   *vm_new(int size);
-int   vm_execute(VM *vm, OpcodeArray *program, int debug);
-void  vm_free(VM *vm);
+void vm_init(VM *vm, int size);
+int  vm_execute(VM *vm, OpcodeArray *program, int debug);
+void vm_free(VM *vm);
 
 #endif
