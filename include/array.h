@@ -20,7 +20,7 @@
 #define array_resize(arr, n)                                                   \
     do {                                                                       \
         (arr)->cap = n;                                                        \
-        (arr)->values = realloc(arr->values, sizeof((arr)->values[0]) * (n));  \
+        (arr)->values = realloc((arr)->values, sizeof((arr)->values[0])*(n));  \
     } while (0)
 
 #define array_free(arr)                                                        \
